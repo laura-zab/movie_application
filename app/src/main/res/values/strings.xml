@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Netflex</string>
+
+    <string name="defaultyear">2023</string>
+    <string name="defaulttitle">Movie Title</string>
+    <string name="defaultdesc">Movie Description</string>
+    <string name="title_main">NETFLEX</string>
+    <string name="title_details">Movie Details</string>
+    <string name="fav_section">Favorites</string>
+    <string name="title_tv_details">TV Series Details</string>
+    <string name="recommended_movies">Recommended Movies:</string>
+    <string name="movies_tabbar">Movies</string>
+    <string name="tv_series_tabbar">TV Series</string>
+    <string name="recommendation_empty">Recommendation List is Empty</string>
+    <string name="recommendation_series">Recommendation Series:</string>
+    <string name="favorite_empty">Favorite List is Empty</string>
+    <string name="search">Search</string>
+
+
+</resources>

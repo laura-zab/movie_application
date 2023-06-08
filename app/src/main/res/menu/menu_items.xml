@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:HTMLCode="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.MainActivity"
+    >
+
+
+    <item
+        android:id="@+id/action_sort_rating"
+        android:title="Sort By Ratings" />
+
+    <item
+        android:id="@+id/action_sort_date"
+        android:title="Sort By Date (Newest First)"/>
+    <item android:id="@+id/language" android:title="Filter By Language" HTMLCode:showAsAction="never">
+        <menu>
+            <item android:id="@+id/en" android:title="English" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/fr" android:title="French" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/es" android:title="Spanish" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/de" android:title="German" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/ar" android:title="Arabic" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/pl" android:title="Polish" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/ru" android:title="Russian" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/zh" android:title="Chinese" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/ko" android:title="Korean" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/ur" android:title="Urdu" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/hi" android:title="Hindi" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/th" android:title="Thai" HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+    <item android:id="@+id/region" android:title="Filter By Region" HTMLCode:showAsAction="never">
+        <menu>
+            <item android:id="@+id/enG" android:title="United States" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/frG" android:title="France" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/esG" android:title="Spain" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/deG" android:title="Germany" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/arG" android:title="UAE" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/plG" android:title="Poland" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/ruG" android:title="Russia" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/zhG" android:title="China" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/koG" android:title="Korea" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/urG" android:title="Pakistan" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/hiG" android:title="India" HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/thG" android:title="Thailand" HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+</menu>

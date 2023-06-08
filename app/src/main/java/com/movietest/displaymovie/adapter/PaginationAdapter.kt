@@ -1,0 +1,191 @@
+package com.movietest.displaymovie.adapter
+
+import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.GenericTransitionOptions
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.movietest.displaymovie.R
+import com.movietest.displaymovie.activity.DetailsActivity
+import com.movietest.displaymovie.models.Result
+import com.movietest.displaymovie.utils.UtilKeys.BASE_URL_IMG
+import com.movietest.displaymovie.utils.UtilKeys.INTENTKEY_MOVIEID
+
+class PaginationAdapter(var context: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
+    private var movieResults: MutableList<Result>?
+    private var isLoadingAdded = false
+    fun setMovies(movieResults: List<Result>?) {
+        this.movieResults = movieResults as MutableList<Result>?
+        notifyDataSetChanged()
+    }
+
+    var result: Result? = null
+
+    init {
+        movieResults = ArrayList()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        var viewHolder: RecyclerView.ViewHolder? = null
+        val inflater = LayoutInflater.from(parent.context)
+        when (viewType) {
+            ITEM -> viewHolder = getViewHolder(parent, inflater)
+            LOADING -> {
+                val v2 = inflater.inflate(R.layout.item_progress, parent, false)
+                viewHolder = LoadingVH(v2)
+            }
+        }
+        return viewHolder!!
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        result = movieResults!![position] // Movie model
+        when (getItemViewType(position)) {
+            ITEM -> {
+                val movieVH = holder as MovieVH?
+                movieVH!!.movieId.text = "" + result!!.id
+                movieVH.mMovieTitle.text = result!!.title
+                movieVH.mYear.text = (result!!.releaseDate
+                        + " | "
+                        + result!!.originalLanguage)
+                movieVH.mMovieDesc.text = result!!.overview
+                Glide.with(context).load(BASE_URL_IMG + result!!.posterPath)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .addListener(object : RequestListener<Drawable?> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any,
+                            target: Target<Drawable?>,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            movieVH.mProgress.visibility = View.GONE
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any,
+                            target: Target<Drawable?>,
+                            dataSource: DataSource,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            movieVH.mProgress.visibility = View.GONE
+                            return false
+                        }
+                    })
+                    .error(R.drawable.noimg)
+                    .centerCrop()
+                    .transition(GenericTransitionOptions.with<Drawable>(android.R.anim.fade_in))
+                    .into(movieVH.mPosterImg)
+            }
+
+            LOADING -> {}
+        }
+    }
+
+    private fun getViewHolder(
+        parent: ViewGroup,
+        inflater: LayoutInflater
+    ): RecyclerView.ViewHolder {
+        val viewHolder: RecyclerView.ViewHolder
+        val v1 = inflater.inflate(R.layout.item_list, parent, false)
+        viewHolder = MovieVH(v1)
+        return viewHolder
+    }
+
+
+
+    override fun getItemCount(): Int {
+        return if (movieResults == null) 0 else movieResults!!.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == movieResults!!.size - 1 && isLoadingAdded) LOADING else ITEM
+    }
+
+    fun add(r: Result) {
+        movieResults!!.add(r)
+        notifyItemInserted(movieResults!!.size - 1)
+    }
+
+    fun addAll(moveResults: List<Result>) {
+        for (result in moveResults) {
+            add(result)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun addLoadingFooter() {
+        isLoadingAdded = true
+        add(Result())
+    }
+
+    fun removeLoadingFooter() {
+        isLoadingAdded = false
+        val position = movieResults!!.size - 1
+        val result = getItem(position)
+        if (result != null) {
+            movieResults!!.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
+    fun getItem(position: Int): Result {
+        return movieResults!![position]
+    }
+
+
+    protected inner class MovieVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val mMovieTitle: TextView
+        val movieId: TextView
+        val mMovieDesc: TextView
+        val mYear
+                : TextView
+        val mPosterImg: ImageView
+        val mProgress: ProgressBar
+        private val ll_card: CardView
+
+        init {
+            movieId = itemView.findViewById<View>(R.id.movie_id) as TextView
+            mMovieTitle = itemView.findViewById<View>(R.id.movie_title) as TextView
+            mMovieDesc = itemView.findViewById<View>(R.id.movie_desc) as TextView
+            mYear = itemView.findViewById<View>(R.id.movie_year) as TextView
+            mPosterImg = itemView.findViewById<View>(R.id.movie_poster) as ImageView
+            mProgress = itemView.findViewById<View>(R.id.progressbar) as ProgressBar
+            ll_card = itemView.findViewById<View>(R.id.ll_card) as CardView
+            ll_card.setOnClickListener {
+                val i = Intent(context, DetailsActivity::class.java)
+                i.putExtra(INTENTKEY_MOVIEID, movieId.text)
+                context.startActivity(i)
+            }
+        }
+    }
+
+    protected inner class LoadingVH(itemView: View?) : RecyclerView.ViewHolder(
+        itemView!!
+    )
+
+    fun filter(list: MutableList<Result>?) {
+        movieResults = list
+        notifyDataSetChanged()
+    }
+
+    companion object {
+        private const val ITEM = 0
+        private const val LOADING = 1
+    }
+}
